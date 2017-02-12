@@ -15,6 +15,7 @@ public class PsetTest {
         assertThat(PsetProblems.longestValidSubstring("(()))("), is(4));
         assertThat(PsetProblems.longestValidSubstring("(()()))()"), is(6));
         assertThat(PsetProblems.longestValidSubstring("))(("), is(0));
+        assertThat(PsetProblems.longestValidSubstring("(())))(((())))"), is(8));
     }
 
     @Test

@@ -2,31 +2,34 @@ package your_code;
 
 import ADTs.QueueADT;
 
+import java.util.LinkedList;
+
 /**
  * An implementation of the Queue interface.
  */
 public class MyQueue implements QueueADT<Integer> {
+    private LinkedList<Integer> queue = new LinkedList<>();
+
 
     @Override
     public void enqueue(Integer item) {
-        // TODO
+        queue.addLast(item);
     }
 
     @Override
     public Integer dequeue() {
-        // TODO
-        return null;
+        Integer elem = queue.removeFirst();
+        return elem;
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO
-        return false;
+        return queue.isEmpty();
     }
 
     @Override
     public Integer front() {
-        // TODO
-        return null;
+        return queue.peek();
     }
+
 }
