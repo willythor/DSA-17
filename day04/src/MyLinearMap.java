@@ -4,6 +4,7 @@ import java.util.*;
  * Implementation of a Map using a List of entries, so most
  * operations are linear time.
  */
+
 public class MyLinearMap<K, V> implements Map<K, V> {
 
 	private List<Entry> entries = new ArrayList<Entry>();
@@ -44,7 +45,11 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 
 	// Returns the entry that contains the target key, or null if there is none.
 	private Entry findEntry(Object target) {
-		// TODO
+		for (int i = 0;i < entries.size();i++) {
+			if (equals(target, entries.get(i).getKey())){
+				return (entries.get(i));
+			}
+		}
 		return null;
 	}
 
@@ -73,7 +78,11 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V get(Object key) {
-		// TODO
+		for (int i = 0;i < entries.size();i++) {
+			if (equals(key, entries.get(i).getKey())){
+				return (entries.get(i).getValue());
+			}
+		}
 		return null;
 	}
 
@@ -93,8 +102,14 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V put(K key, V value) {
-		// TODO
-		return null;
+		Entry entry = findEntry(key);
+		if (entry==null) {
+			entries.add(new Entry(key,value));
+			return null;
+		}
+		V output = get(key);
+		entry.setValue(value);
+		return output;
 	}
 
 	@Override
@@ -106,8 +121,13 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V remove(Object key) {
-		// TODO
-		return null;
+		Entry entry = findEntry(key);
+		if (entry == null) {
+			return null;
+		}
+		V output = entry.value;
+		entries.remove(entry);
+		return output;
 	}
 
 	@Override

@@ -43,28 +43,48 @@ public class MyHashMap<K, V> implements Map<K, V> {
 	 * Initialize maps
 	 */
 	protected void makeMaps(int size) {
-		// TODO: Implement this method
+		maps = new ArrayList<MyLinearMap<K, V>>(size);
+		for (int i=0; i<size; i++) {
+			maps.add(new MyLinearMap<K, V>());
+		}
 	}
 
 	protected MyLinearMap<K, V> chooseMap(Object key) {
-		// TODO: Implement this method
-		return null;
+		int index = key==null ? 0 : key.hashCode() % maps.size();
+		return maps.get(index);
 	}
 
 	@Override
 	public boolean containsKey(Object key) {
-		// TODO
-		return false;
+		MyLinearMap<K, V> map = chooseMap(key);
+		return map.containsKey(key);
 	}
 
 	@Override
 	public boolean containsValue(Object value) {
-		// TODO
+
+		for (MyLinearMap<K,V> m : maps) {
+			if (m.containsValue(value)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	protected void rehash(double growthFactor) {
-		// TODO: Implement this method
+
+		List<MyLinearMap<K,V>> og_maps = maps;
+		makeMaps((int)(maps.size()*growthFactor));
+
+		for (MyLinearMap<K,V> m : og_maps) {
+			for (Map.Entry<K,V> entry: m.getEntries()) {
+				K key = entry.getKey();
+				V value = entry.getValue();
+				put(key, value);
+			}
+
+		}
+
 	}
 
 	@Override
@@ -75,14 +95,29 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V put(K key, V value) {
-		// TODO
-		return null;
+
+		MyLinearMap<K, V> map = chooseMap(key);
+		size -= map.size();
+		V oldValue = map.put(key, value);
+		size += map.size();
+		if ((size() > (maps.size() * ALPHA))) {
+			size = 0;
+			rehash(GROWTH_FACTOR);
+		}
+		return oldValue;
 	}
 
 	@Override
 	public V remove(Object key) {
-		// TODO
-		return null;
+		MyLinearMap<K, V> map = chooseMap(key);
+		size -= map.size();
+		V oldValue = map.remove(key);
+		size += map.size();
+		if ((size() < (maps.size() * BETA)) && maps.size()*SHRINK_FACTOR >= MIN_MAPS) {
+			size = 0;
+			rehash(SHRINK_FACTOR);
+		}
+		return oldValue;
 	}
 
 	@Override

@@ -182,6 +182,7 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 	 *
 	 * @return
 	 */
+
 	protected Collection<? extends java.util.Map.Entry<K, V>> getEntries() {
 		return entries;
 	}
