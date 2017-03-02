@@ -1,27 +1,3 @@
-
-<<<<<<< HEAD
-/**
- * Created by sidd on 2/20/17.
- */
-
-
-public class PeakFinding {
-
-    public static int findPeakHelper(int[] nums, int n,int low, int high) {
-
-        int mid = low + (high - low)/2;
-
-        if ((mid == 0 || nums[mid-1] <= nums[mid]) && (mid == n-1 ||
-                nums[mid+1] <= nums[mid]))
-            return mid;
-
-
-        else if (mid > 0 && nums[mid-1] > nums[mid])
-            return findPeakHelper(nums, low, (mid -1), n);
-
-        else return findPeakHelper(nums, (mid + 1), high, n);
-    }
-=======
 public class PeakFinding {
 
     // Return -1 is left is higher, 1 if right is higher, 0 if peak
@@ -71,18 +47,57 @@ public class PeakFinding {
     }
 
 
->>>>>>> 3ed7b9c2c11a26ca8b2fa7e2b74c3c4c3a2ce6ae
-
     public static int findOneDPeak(int[] nums){
-
-        return findPeakHelper(nums,nums.length,0,nums.length);
-
+        int lo = 0;
+        int hi = nums.length;
+        while (lo < hi) {
+            int mid = (hi+lo)/2;
+            int direction = peak(mid, nums);
+            if (direction == 0) return mid;
+            else if (direction == -1) hi = mid;
+            else if (direction == 1) lo = mid+1;
+        }
+        return -1;
     }
 
-    public static int[] findTwoDPeak(int[][] nums){
-    	// TODO: Optionally due by 2/23. Will be due on 2/27.
-        int[] answer = {-1,-1};
-        return answer;
+    public static int[] findTwoDPeak(int[][] nums) {
+        int x_lo = 0;
+        int x_hi = nums[0].length;
+        int y_lo = 0;
+        int y_hi = nums.length;
+        int i = 0;
+
+        while ((x_lo < x_hi) && (y_lo < y_hi)) {
+            if (i % 2 == 0) {
+//                checking a column
+                int mid_x = (x_hi + x_lo) / 2;
+                int y_index = maxYIndex(mid_x, y_lo, y_hi, nums);
+                int direction = peakX(mid_x,y_index,nums);
+                if (direction == 0) return new int[]{y_index, mid_x};
+                else if (direction == 1) {
+                    x_lo = mid_x+1;
+                }
+                else if (direction == -1) {
+                    x_hi = mid_x;
+                }
+
+            } else {
+//               checking a row
+                int mid_y = (y_hi + y_lo) / 2;
+                int x_index = maxXIndex(mid_y, x_lo, x_hi, nums);
+                int direction = peakY(x_index,mid_y,nums);
+                if (direction == 0) return new int[]{mid_y, x_index};
+                else if (direction == 1) {
+                    y_lo = mid_y + 1;
+                }
+                else if (direction == -1) {
+                    y_hi = mid_y;
+                }
+
+            }
+            i++;
+        }
+        return new int[]{-1, -1};
     }
 
 }
