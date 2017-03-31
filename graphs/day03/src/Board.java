@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Board {
      * Set the global board size and tile state
      */
     public Board(int[][] b) {
-        // TODO: Your code here
+        tiles = b;
     }
 
     /*
@@ -22,8 +23,7 @@ public class Board {
      * class should  work for any puzzle size)
      */
     private int size() {
-    	// TODO: Your code here
-        return 0;
+    	return tiles.length;
     }
 
     /*
@@ -31,23 +31,58 @@ public class Board {
      * Estimated cost from the current node to the goal for A* (h(n))
      */
     public int manhattan() {
-		// TODO: Your code here
-        return 0;
+        int elem;
+        int sum=0;
+
+        for (int i = 0; i < tiles.length; i++){
+            for (int j = 0; j < tiles.length; j++){
+                elem = tiles[i][j];
+                for (int y = 0; y<goal.length; y++){
+                    for (int x = 0; x<goal.length; x++){
+                        if (goal[y][x] == elem){
+                            sum+=Math.abs(y-i) + Math.abs(x-j);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return sum;
     }
 
     /*
      * Compare the current state to the goal state
      */
     public boolean isGoal() {
-    	// TODO: Your code here
-        return false;
+        return (manhattan()==0);
     }
 
     /*
      * Returns true if the board is solvable
      */
     public boolean solvable() {
-    	// TODO: Your code here
+        List<Integer> tilesList = new ArrayList();
+        int inversions = 0;
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
+                tilesList.add(tiles[i][j]);
+            }
+        }
+
+        for (int i = 0; i < tilesList.size(); i++) {
+            if (tilesList.get(i)==0){continue;}
+            for (int j = i; j < tilesList.size(); j++) {
+                if (tilesList.get(i) > tilesList.get(j)){
+                    if (tilesList.get(j)==0){continue;}
+                    inversions++;
+                }
+            }
+        }
+
+        if (inversions % 2 == 0) {
+            return true;
+        }
         return false;
     }
 
