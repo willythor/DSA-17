@@ -16,6 +16,7 @@ public class Board {
      */
     public Board(int[][] b) {
         tiles = b;
+        n = tiles.length;
     }
 
     /*
@@ -23,7 +24,7 @@ public class Board {
      * class should  work for any puzzle size)
      */
     private int size() {
-    	return tiles.length;
+        return tiles.length;
     }
 
     /*
@@ -37,13 +38,14 @@ public class Board {
         for (int i = 0; i < tiles.length; i++){
             for (int j = 0; j < tiles.length; j++){
                 elem = tiles[i][j];
-                for (int y = 0; y<goal.length; y++){
-                    for (int x = 0; x<goal.length; x++){
-                        if (goal[y][x] == elem){
-                            sum+=Math.abs(y-i) + Math.abs(x-j);
+                if (elem != 0) {
+                    for (int y = 0; y < goal.length; y++) {
+                        for (int x = 0; x < goal.length; x++) {
+                            if (goal[y][x] == elem) {
+                                sum += Math.abs(y - i) + Math.abs(x - j);
+                            }
                         }
                     }
-
                 }
             }
         }
@@ -93,8 +95,42 @@ public class Board {
      * is valid, add it to an accumulator.
      */
     public Iterable<Board> neighbors() {
-    	// TODO: Your code here
-        return null;
+        ArrayList<Board> possibilities = new ArrayList<Board>();
+        int x = 0;
+        int y = 0;
+        //find 0
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
+                if (tiles[i][j] == 0){
+                    x = i;
+                    y = j;
+                }
+            }
+        }
+        // Check the 4 possible switches
+        if (x > 0) {
+            possibilities.add(new Board(switchTiles(x-1,y,x,y)));
+        }
+        if (x < tiles.length-1){
+            possibilities.add(new Board(switchTiles(x+1,y,x,y)));
+        }
+        if (y > 0) {
+            possibilities.add(new Board(switchTiles(x,y-1,x,y)));
+        }
+        if (y < tiles.length-1){
+            possibilities.add(new Board(switchTiles(x,y+1,x,y)));
+        }
+        return possibilities;
+    }
+
+    public int[][] switchTiles(int targetX, int targetY, int zeroX, int zeroY){
+        int[][] newTiles = new int[tiles.length][];
+        for (int i = 0; i < tiles.length; i++) {
+            newTiles[i] = tiles[i].clone();
+        }
+        newTiles[zeroX][zeroY] = tiles[targetX][targetY];
+        newTiles[targetX][targetY] = tiles[zeroX][zeroY];
+        return newTiles;
     }
 
     /*
