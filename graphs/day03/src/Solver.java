@@ -26,8 +26,7 @@ public class Solver {
             this.board = board;
             this.moves = moves;
             this.prev = prev;
-            // TODO: Compute cost of board state according to A*
-            cost = 0;
+            cost = moves + board.manhattan();
         }
 
         @Override
@@ -51,8 +50,10 @@ public class Solver {
      * Return the root state of a given state
      */
     private State root(State state) {
-    	// TODO: Your code here
-        return null;
+    	while (state.prev != null){
+    	    state = state.prev;
+        }
+        return state;
     }
 
     /*
@@ -62,6 +63,14 @@ public class Solver {
      */
     public Solver(Board initial) {
     	// TODO: Your code here
+        State initialState = new State(initial, 0, null);
+        PriorityQueue<State> toCheck = new PriorityQueue<>();
+
+        toCheck.add(initialState);
+
+        while (!toCheck.isEmpty()){
+
+        }
     }
 
     /*
